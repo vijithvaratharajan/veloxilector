@@ -8,13 +8,6 @@
 
 ---
 
-## 🌐 Live Demo
-
-[Click here to try VeloxiLector](https://veloxilector.vercel.app)  
-*(Replace with your actual deployed URL)*
-
----
-
 ## ✨ Features
 
 - Upload `.txt` or `.pdf` files for word-by-word reading  
@@ -29,7 +22,6 @@
 
 ---
 
-
 ## 💻 Technologies Used
 
 - **React.js** (frontend)  
@@ -39,7 +31,7 @@
 
 ---
 
-## 🖼️ Screenshots / GIFs
+## 🖼️ Screenshots
 
 *(Add your screenshots or GIFs here for showcase)*
 
@@ -55,3 +47,20 @@
 ```bash
 git clone https://github.com/YOUR_USERNAME/veloxilector.git
 cd veloxilector
+
+
+---
+
+## 🧩 Usage
+
+Upload a .txt or .pdf file
+
+Adjust WPM or toggle Adaptive Reading Engine
+
+Click Play to start reading
+
+Use Focus Mode for a distraction-free experience
+
+Select specific text to read only that portion 
+
+---
