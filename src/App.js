@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import "./App.css";
 import * as pdfjsLib from "pdfjs-dist/build/pdf";
 
@@ -46,15 +46,17 @@ export default function App() {
     if (selected.trim()) processText(selected);
   };
 
-  const getDelay = (word) => {
-    let base = 60000 / wpm;
-    if (adaptive) {
-      const lengthFactor = Math.min(word.length / 5, 2);
-      const punctuationFactor = /[.,!?]/.test(word) ? 2 : 1;
-      base *= lengthFactor * punctuationFactor;
-    }
-    return base;
-  };
+  const getDelay = useCallback((word) => {
+  let base = 60000 / wpm;
+
+  if (adaptive) {
+    const lengthFactor = Math.min(word.length / 5, 2);
+    const punctuationFactor = /[.,!?]/.test(word) ? 2 : 1;
+    base *= lengthFactor * punctuationFactor;
+  }
+
+  return base;
+}, [wpm, adaptive]);
 
   useEffect(() => {
     if (!isPlaying) return;
@@ -75,7 +77,7 @@ export default function App() {
 
     timerRef.current = setTimeout(run, getDelay(words[index] || ""));
     return () => clearTimeout(timerRef.current);
-  }, [isPlaying, index, wpm, adaptive]);
+  }, [isPlaying, index, words, getDelay]);
 
   // 🔥 AUTO SCROLL
   useEffect(() => {
