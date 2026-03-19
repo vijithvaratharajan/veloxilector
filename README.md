@@ -32,8 +32,9 @@
 ---
 
 ## 🖼️ Screenshots
-<img width="1909" height="973" alt="screenshot1" src="https://github.com/user-attachments/assets/d76a4391-5fe8-40dd-ace1-7d89f48b4109" />
-<img width="1903" height="971" alt="screenshot2" src="https://github.com/user-attachments/assets/8e5ddf13-aaa9-49ac-8236-1d94e3ee67a4" />
+<img width="1883" height="947" alt="screenshot1" src="https://github.com/user-attachments/assets/712ccaf3-fbaa-461f-aae6-b547e6d62ecf" />
+
+<img width="1873" height="943" alt="screenshot2" src="https://github.com/user-attachments/assets/951a18fe-4deb-4a65-836a-b77d986463b0" />
 
 ---
 
