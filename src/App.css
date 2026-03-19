@@ -1,0 +1,375 @@
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: #0b1c1a;
+  color: #e2fef7;
+}
+
+.app {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.card {
+  background: #102a27;
+  padding: 30px;
+  border-radius: 20px;
+  width: 500px;
+  box-shadow: 0 10px 40px rgba(0, 255, 200, 0.1);
+  text-align: center;
+  border: 1px solid rgba(0, 255, 200, 0.1);
+}
+
+.title {
+  margin-bottom: 20px;
+  color: #5eead4;
+  letter-spacing: 1px;
+}
+
+.textarea {
+  width: 100%;
+  height: 100px;
+  border-radius: 10px;
+  border: none;
+  padding: 10px;
+  margin-bottom: 10px;
+  resize: none;
+  font-size: 14px;
+  background: #0f3a36;
+  color: #d1faf5;
+}
+
+.file-input {
+  margin-bottom: 20px;
+  color: #94fdf4;
+}
+
+.reader-box {
+  font-size: 44px;
+  font-weight: bold;
+  margin: 30px 0;
+  height: 60px;
+  color: #ccfbf1;
+}
+
+.highlight {
+  color: #ff4d4d;
+  font-weight: bold;
+  text-shadow: 0 0 8px rgba(255, 77, 77, 0.6);
+}
+
+.controls {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin: 20px 0;
+}
+
+.btn {
+  padding: 10px 15px;
+  border-radius: 10px;
+  border: none;
+  background: #134e4a;
+  color: #ccfbf1;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn:hover {
+  background: #0f766e;
+  transform: translateY(-1px);
+}
+
+.primary {
+  background: #14b8a6;
+  color: #022c22;
+}
+
+.primary:hover {
+  background: #2dd4bf;
+}
+
+.slider {
+  margin-top: 15px;
+}
+
+.progress-container {
+  width: 100%;
+  height: 8px;
+  background: #134e4a;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #14b8a6, #2dd4bf);
+  transition: width 0.2s ease;
+}
+
+.progress-text {
+  font-size: 12px;
+  margin-top: 5px;
+  color: #99f6e4;
+}
+
+.focus .card {
+  background: transparent;
+  box-shadow: none;
+  border: none;
+}
+
+.focus .reader-box {
+  font-size: 60px;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.input-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.file-label {
+  background: #134e4a;
+  padding: 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  text-align: center;
+  flex: 1;
+  transition: 0.2s;
+}
+
+.file-label:hover {
+  background: #0f766e;
+}
+
+.wpm-input {
+  margin-top: 10px;
+  width: 80px;
+  padding: 5px;
+  border-radius: 5px;
+  border: none;
+  text-align: center;
+}
+
+textarea::selection {
+  background: rgba(45, 212, 191, 0.5); /* jade green */
+  color: #022c22;
+}
+
+/* 🔥 THEMES */
+
+.osaka {
+  background: #0b1c1a;
+  color: #ccfbf1;
+}
+
+.tokyo {
+  background: #1a1b26;
+  color: #c0caf5;
+}
+
+.kyoto {
+  background: #f3f4f6;
+  color: #1f2937;
+}
+
+.neo {
+  background: #000000;
+  color: #00ffcc;
+}
+
+/* clickable text preview */
+.text-preview {
+  margin-top: 15px;
+  line-height: 1.8;
+  max-height: 120px;
+  overflow-y: auto;
+  font-size: 14px;
+  opacity: 0.8;
+}
+
+.text-preview span {
+  cursor: pointer;
+  padding: 2px;
+  transition: 0.2s;
+}
+
+.text-preview span:hover {
+  background: rgba(255,255,255,0.1);
+}
+
+.active-word {
+  background: rgba(45, 212, 191, 0.3);
+  border-radius: 4px;
+}
+
+/* OSaka */
+.osaka .card {
+  background: #102a27;
+}
+
+/* Tokyo */
+.tokyo .card {
+  background: #24283b;
+}
+
+/* Kyoto */
+.kyoto .card {
+  background: #ffffff;
+  color: #1f2937;
+}
+
+/* Neo */
+.neo .card {
+  background: #050505;
+}
+
+.theme-dropdown {
+  margin-top: 10px;
+  padding: 8px;
+  border-radius: 8px;
+  border: none;
+  font-size: 14px;
+}
+
+/* Theme-specific dropdowns */
+.osaka .theme-dropdown {
+  background: #134e4a;
+  color: #ccfbf1;
+}
+
+.tokyo .theme-dropdown {
+  background: #2e3c64;
+  color: #c0caf5;
+}
+
+.kyoto .theme-dropdown {
+  background: #e5e7eb;
+  color: #111827;
+}
+
+.neo .theme-dropdown {
+  background: #111;
+  color: #00ffcc;
+}
+
+.osaka .textarea,
+.osaka .btn {
+  background: #134e4a;
+  color: #ccfbf1;
+}
+
+.tokyo .textarea,
+.tokyo .btn {
+  background: #2e3c64;
+  color: #c0caf5;
+}
+
+.kyoto .textarea,
+.kyoto .btn {
+  background: #e5e7eb;
+  color: #111827;
+}
+
+.neo .textarea,
+.neo .btn {
+  background: #111;
+  color: #00ffcc;
+}
+
+/* 🔥 Top controls spacing */
+.top-controls {
+  display: flex;
+  gap: 12px;
+  margin: 15px 0;
+  flex-wrap: wrap;
+}
+
+/* Ensure all buttons are consistent size */
+.btn, .file-label, .theme-dropdown {
+  padding: 10px 14px;
+  border-radius: 10px;
+}
+
+/* 🔥 Bottom control spacing */
+.controls.spaced {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  margin-top: 15px;
+}
+
+.file-label {
+  padding: 10px 14px;
+  border-radius: 10px;
+  cursor: pointer;
+  text-align: center;
+  transition: 0.2s;
+}
+
+.osaka .file-label { background: #134e4a; color: #ccfbf1; }
+.tokyo .file-label { background: #2e3c64; color: #c0caf5; }
+.kyoto .file-label { background: #e5e7eb; color: #111827; }
+.neo .file-label { background: #111; color: #00ffcc; }
+
+.wpm-control {
+  margin-top: 15px;
+  text-align: center;
+}
+
+.wpm-control input {
+  width: 100%;
+  margin-top: 8px;
+}
+
+/* Accent color per theme */
+.osaka input[type=\"range\"] { accent-color: #14b8a6; }
+.tokyo input[type=\"range\"] { accent-color: #7aa2f7; }
+.kyoto input[type=\"range\"] { accent-color: #4b5563; }
+.neo input[type=\"range\"] { accent-color: #00ffcc; }
+
+.theme-dropdown {
+  padding: 10px;
+  border-radius: 10px;
+  border: none;
+}
+
+.osaka .theme-dropdown { background: #134e4a; color: #ccfbf1; }
+.tokyo .theme-dropdown { background: #2e3c64; color: #c0caf5; }
+.kyoto .theme-dropdown { background: #e5e7eb; color: #111827; }
+.neo .theme-dropdown { background: #111; color: #00ffcc; }
+
+.word-animate {
+  display: inline-block;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.reader-box {
+  font-size: 42px;
+  font-weight: bold;
+  text-align: center;
+  margin: 30px 0;
+}
+
+.highlight {
+  color: red;
+}
+
+.active-word {
+  background: rgba(45, 212, 191, 0.3);
+  border-radius: 4px;
+  padding: 2px 4px;
+}
+
+body, .card, .btn, .textarea, .text-preview {
+  transition: all 0.25s ease;
+}
