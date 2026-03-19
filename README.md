@@ -32,11 +32,8 @@
 ---
 
 ## 🖼️ Screenshots
-
-*(Add your screenshots or GIFs here for showcase)*
-
-![VeloxiLector Screenshot](./assets/screenshot1.png)  
-![VeloxiLector Focus Mode](./assets/screenshot2.png)  
+<img width="1909" height="973" alt="screenshot1" src="https://github.com/user-attachments/assets/d76a4391-5fe8-40dd-ace1-7d89f48b4109" />
+<img width="1903" height="971" alt="screenshot2" src="https://github.com/user-attachments/assets/8e5ddf13-aaa9-49ac-8236-1d94e3ee67a4" />
 
 ---
 
