@@ -9,7 +9,7 @@ export default function App() {
   const [text, setText] = useState("");
   const [words, setWords] = useState([]);
   const [index, setIndex] = useState(0);
-  const [currentWord, setCurrentWord] = useState("Ready?");
+  const [currentWord, setCurrentWord] = useState("");
   const [wpm, setWpm] = useState(300);
   const [isPlaying, setIsPlaying] = useState(false);
   const [adaptive, setAdaptive] = useState(false);
