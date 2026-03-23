@@ -79,7 +79,6 @@ export default function App() {
     return () => clearTimeout(timerRef.current);
   }, [isPlaying, index, words, getDelay]);
 
-  // 🔥 AUTO SCROLL
   useEffect(() => {
     if (!previewRef.current || !wordRefs.current[index]) return;
 
