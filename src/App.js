@@ -174,7 +174,6 @@ export default function App() {
               >
                 <option value="osaka">Osaka Jade</option>
                 <option value="tokyo">Tokyo Night</option>
-                <option value="kyoto">Kyoto Mist</option>
                 <option value="neo">Neo Dark</option>
               </select>
             </div>
