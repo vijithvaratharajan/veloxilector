@@ -303,7 +303,7 @@ textarea::selection {
 /* 🔥 Bottom control spacing */
 .controls.spaced {
   display: flex;
-  gap: 10px;
+  gap: 12px;
   flex-wrap: wrap;
   justify-content: center;
   margin-top: 15px;
