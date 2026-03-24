@@ -142,6 +142,18 @@ export default function App() {
   ? Math.round(((index + 1) / words.length) * 100)
   : 0;
 
+const handleReset = () => {
+  if (!words.length) return;
+
+  setIsPlaying(false);
+  setIndex(0);
+  setCurrentWord(words[0]);
+ 
+  if (typeof indexRef !== "undefined" && indexRef.current !== undefined) {
+    indexRef.current = 0;
+  }
+};
+
   return (
     <div className={`app ${theme} ${focusMode ? "focus" : ""}`}>
       <div className="card">
@@ -208,6 +220,10 @@ export default function App() {
           <button className="btn primary" onClick={() => setIsPlaying((p) => !p)}>
             {isPlaying ? "Pause" : "Play"}
           </button>
+
+           <button className="btn" onClick={handleReset}>
+            Reset
+            </button>
 
           <button className="btn" onClick={() => setAdaptive((a) => !a)}>
             {adaptive
