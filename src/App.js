@@ -46,17 +46,17 @@ export default function App() {
     if (selected.trim()) processText(selected);
   };
 
+  // FIX 2: clamp lengthFactor minimum to 1.0 — short words were playing
+  // faster than base delay, which is backwards.
   const getDelay = useCallback((word) => {
-  let base = 60000 / wpm;
-
-  if (adaptive) {
-    const lengthFactor = Math.min(word.length / 5, 2);
-    const punctuationFactor = /[.,!?]/.test(word) ? 2 : 1;
-    base *= lengthFactor * punctuationFactor;
-  }
-
-  return base;
-}, [wpm, adaptive]);
+    let base = 60000 / wpm;
+    if (adaptive) {
+      const lengthFactor = Math.max(1.0, Math.min(word.length / 5, 2));
+      const punctuationFactor = /[.,!?]/.test(word) ? 2 : 1;
+      base *= lengthFactor * punctuationFactor;
+    }
+    return base;
+  }, [wpm, adaptive]);
 
   useEffect(() => {
     if (!isPlaying) return;
@@ -71,7 +71,6 @@ export default function App() {
         setCurrentWord(words[next]);
         return next;
       });
-
       timerRef.current = setTimeout(run, getDelay(words[index] || ""));
     };
 
@@ -81,7 +80,6 @@ export default function App() {
 
   useEffect(() => {
     if (!previewRef.current || !wordRefs.current[index]) return;
-
     wordRefs.current[index].scrollIntoView({
       behavior: "smooth",
       block: "center",
@@ -97,7 +95,6 @@ export default function App() {
       reader.onload = async function () {
         const typedArray = new Uint8Array(this.result);
         const pdf = await pdfjsLib.getDocument({ data: typedArray }).promise;
-
         let fullText = "";
         for (let i = 1; i <= pdf.numPages; i++) {
           const page = await pdf.getPage(i);
@@ -105,7 +102,6 @@ export default function App() {
           const strings = content.items.map((item) => item.str);
           fullText += strings.join(" ") + " ";
         }
-
         setText(fullText);
         processText(fullText);
       };
@@ -126,11 +122,77 @@ export default function App() {
     setCurrentWord(words[i]);
   };
 
+  // FIX 1: removed dead indexRef code that was left over from a refactor.
+  const handleReset = () => {
+    if (!words.length) return;
+    setIsPlaying(false);
+    setIndex(0);
+    setCurrentWord(words[0]);
+  };
+
+  // FIX 5: step one word back
+  const stepBack = useCallback(() => {
+    if (!words.length || index <= 0) return;
+    setIsPlaying(false);
+    const newIndex = index - 1;
+    setIndex(newIndex);
+    setCurrentWord(words[newIndex]);
+  }, [index, words]);
+
+  // FIX 5: step one word forward
+  const stepForward = useCallback(() => {
+    if (!words.length || index >= words.length - 1) return;
+    setIsPlaying(false);
+    const newIndex = index + 1;
+    setIndex(newIndex);
+    setCurrentWord(words[newIndex]);
+  }, [index, words]);
+
+  // FIX 4: keyboard shortcuts — Space, ←, →
+  useEffect(() => {
+    const handleKey = (e) => {
+      // don't intercept shortcuts while user is typing in the textarea
+      if (e.target.tagName === "TEXTAREA") return;
+
+      if (e.code === "Space") {
+        e.preventDefault();
+        if (words.length) setIsPlaying((p) => !p);
+      }
+      if (e.code === "ArrowLeft") {
+        e.preventDefault();
+        stepBack();
+      }
+      if (e.code === "ArrowRight") {
+        e.preventDefault();
+        stepForward();
+      }
+    };
+    window.addEventListener("keydown", handleKey);
+    return () => window.removeEventListener("keydown", handleKey);
+  }, [words, stepBack, stepForward]);
+
+  // FIX 6: time remaining estimate
+  const timeRemaining = (() => {
+    if (!words.length || index >= words.length - 1) return null;
+    const wordsLeft = words.length - index - 1;
+    const totalSec = Math.round((wordsLeft * 60) / wpm);
+    const mins = Math.floor(totalSec / 60);
+    const secs = totalSec % 60;
+    if (mins === 0) return `~${secs}s remaining`;
+    return `~${mins}m ${secs}s remaining`;
+  })();
+
+  const progress = words.length
+    ? Math.round(((index + 1) / words.length) * 100)
+    : 0;
+
+  // FIX 7: key={index} forces React to remount the span on every word
+  // change, which re-triggers the CSS animation defined on .word-animate.
   const renderWord = (word) => {
-    if (!word) return "";
+    if (!word) return null;
     const pivot = Math.floor(word.length / 2);
     return (
-      <span className="word-animate">
+      <span key={index} className="word-animate">
         <span>{word.slice(0, pivot)}</span>
         <span className="highlight">{word[pivot]}</span>
         <span>{word.slice(pivot + 1)}</span>
@@ -138,27 +200,12 @@ export default function App() {
     );
   };
 
-  const progress = words.length
-  ? Math.round(((index + 1) / words.length) * 100)
-  : 0;
-
-const handleReset = () => {
-  if (!words.length) return;
-
-  setIsPlaying(false);
-  setIndex(0);
-  setCurrentWord(words[0]);
- 
-  if (typeof indexRef !== "undefined" && indexRef.current !== undefined) {
-    indexRef.current = 0;
-  }
-};
-
   return (
     <div className={`app ${theme} ${focusMode ? "focus" : ""}`}>
       <div className="card">
         <h1 className="title">VeloxiLector</h1>
 
+        {/* textarea + top controls: only when not playing and not in focus mode */}
         {!isPlaying && !focusMode && (
           <>
             <textarea
@@ -168,17 +215,19 @@ const handleReset = () => {
               onChange={handleTextChange}
               placeholder="Paste text or upload file..."
             />
-
             <div className="top-controls">
               <label className="file-label">
                 Upload
-                <input type="file" accept=".txt,.pdf" onChange={handleFileUpload} hidden />
+                <input
+                  type="file"
+                  accept=".txt,.pdf"
+                  onChange={handleFileUpload}
+                  hidden
+                />
               </label>
-
               <button className="btn" onClick={processSelection}>
                 Read Selection
               </button>
-
               <select
                 className="theme-dropdown"
                 value={theme}
@@ -186,13 +235,16 @@ const handleReset = () => {
               >
                 <option value="osaka">Osaka Jade</option>
                 <option value="tokyo">Tokyo Night</option>
+                <option value="kyoto">Kyoto Light</option>
                 <option value="neo">Neo Dark</option>
               </select>
             </div>
           </>
         )}
 
-        {isPlaying && !focusMode && (
+        {/* FIX 3: preview stays visible whenever words are loaded,
+            including while paused — so you can click to reposition. */}
+        {words.length > 0 && !focusMode && (
           <div className="text-preview" ref={previewRef}>
             {words.map((w, i) => (
               <span
@@ -213,28 +265,56 @@ const handleReset = () => {
           <div className="progress-bar" style={{ width: `${progress}%` }} />
         </div>
         <p className="progress-text">
-          {progress}% • Word {index + 1} of {words.length}
+          {progress}% · Word {index + 1} of {words.length}
+          {timeRemaining && ` · ${timeRemaining}`}
         </p>
 
         <div className="controls spaced">
-          <button className="btn primary" onClick={() => setIsPlaying((p) => !p)}>
+          {/* FIX 5: step buttons */}
+          <button
+            className="btn"
+            onClick={stepBack}
+            title="Step back (←)"
+            disabled={!words.length || index === 0}
+          >
+            ◀
+          </button>
+
+          <button
+            className="btn primary"
+            onClick={() => setIsPlaying((p) => !p)}
+            disabled={!words.length}
+          >
             {isPlaying ? "Pause" : "Play"}
           </button>
 
-           <button className="btn" onClick={handleReset}>
-            Reset
-            </button>
+          <button
+            className="btn"
+            onClick={stepForward}
+            title="Step forward (→)"
+            disabled={!words.length || index >= words.length - 1}
+          >
+            ▶
+          </button>
 
+          <button className="btn" onClick={handleReset} disabled={!words.length}>
+            Reset
+          </button>
+
+          {/* FIX 8: shorter adaptive label */}
           <button className="btn" onClick={() => setAdaptive((a) => !a)}>
-            {adaptive
-              ? "Turn OFF Adaptive Reading Engine"
-              : "Turn ON Adaptive Reading Engine"}
+            Adaptive: {adaptive ? "ON" : "OFF"}
           </button>
 
           <button className="btn" onClick={() => setFocusMode((f) => !f)}>
-            {focusMode ? "Exit Focus" : "Focus Mode"}
+            {focusMode ? "Exit Focus" : "Focus"}
           </button>
         </div>
+
+        {/* FIX 4: keyboard hint */}
+        <p className="keyboard-hint">
+          Space · Play/Pause &nbsp;|&nbsp; ← → · Step word
+        </p>
 
         <div className="wpm-control">
           <label>Speed: {wpm} WPM</label>

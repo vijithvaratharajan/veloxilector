@@ -8,8 +8,9 @@ body {
 .app {
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
   min-height: 100vh;
+  padding: 30px 0;
 }
 
 .card {
@@ -39,11 +40,7 @@ body {
   font-size: 14px;
   background: #0f3a36;
   color: #d1faf5;
-}
-
-.file-input {
-  margin-bottom: 20px;
-  color: #94fdf4;
+  box-sizing: border-box;
 }
 
 .reader-box {
@@ -52,6 +49,26 @@ body {
   margin: 30px 0;
   height: 60px;
   color: #ccfbf1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* FIX 7: word change animation — key={index} forces remount each word */
+@keyframes wordPop {
+  from {
+    opacity: 0;
+    transform: scale(0.88);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.word-animate {
+  display: inline-block;
+  animation: wordPop 0.1s ease-out;
 }
 
 .highlight {
@@ -77,22 +94,26 @@ body {
   transition: all 0.2s ease;
 }
 
-.btn:hover {
+.btn:hover:not(:disabled) {
   background: #0f766e;
   transform: translateY(-1px);
+}
+
+/* FIX 5: disabled state for step/play/reset buttons */
+.btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+  transform: none;
 }
 
 .primary {
   background: #14b8a6;
   color: #022c22;
+  min-width: 70px;
 }
 
-.primary:hover {
+.primary:hover:not(:disabled) {
   background: #2dd4bf;
-}
-
-.slider {
-  margin-top: 15px;
 }
 
 .progress-container {
@@ -115,6 +136,14 @@ body {
   color: #99f6e4;
 }
 
+/* FIX 4: keyboard hint */
+.keyboard-hint {
+  font-size: 11px;
+  color: #4d8a7a;
+  margin: 6px 0 0;
+  letter-spacing: 0.03em;
+}
+
 .focus .card {
   background: transparent;
   box-shadow: none;
@@ -125,66 +154,23 @@ body {
   font-size: 60px;
 }
 
-.input-group {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.input-actions {
-  display: flex;
-  justify-content: space-between;
-  gap: 10px;
-}
-
 .file-label {
   background: #134e4a;
-  padding: 10px;
+  padding: 10px 14px;
   border-radius: 10px;
   cursor: pointer;
   text-align: center;
-  flex: 1;
   transition: 0.2s;
+  color: #ccfbf1;
 }
 
 .file-label:hover {
   background: #0f766e;
 }
 
-.wpm-input {
-  margin-top: 10px;
-  width: 80px;
-  padding: 5px;
-  border-radius: 5px;
-  border: none;
-  text-align: center;
-}
-
 textarea::selection {
-  background: rgba(45, 212, 191, 0.5); /* jade green */
+  background: rgba(45, 212, 191, 0.5);
   color: #022c22;
-}
-
-/* 🔥 THEMES */
-
-.osaka {
-  background: #0b1c1a;
-  color: #ccfbf1;
-}
-
-.tokyo {
-  background: #1a1b26;
-  color: #c0caf5;
-}
-
-.kyoto {
-  background: #f3f4f6;
-  color: #1f2937;
-}
-
-.neo {
-  background: #000000;
-  color: #00ffcc;
 }
 
 /* clickable text preview */
@@ -195,6 +181,7 @@ textarea::selection {
   overflow-y: auto;
   font-size: 14px;
   opacity: 0.8;
+  text-align: left;
 }
 
 .text-preview span {
@@ -204,89 +191,16 @@ textarea::selection {
 }
 
 .text-preview span:hover {
-  background: rgba(255,255,255,0.1);
+  background: rgba(255, 255, 255, 0.1);
 }
 
 .active-word {
   background: rgba(45, 212, 191, 0.3);
   border-radius: 4px;
+  padding: 2px 4px;
 }
 
-/* OSaka */
-.osaka .card {
-  background: #102a27;
-}
-
-/* Tokyo */
-.tokyo .card {
-  background: #24283b;
-}
-
-/* Kyoto */
-.kyoto .card {
-  background: #ffffff;
-  color: #1f2937;
-}
-
-/* Neo */
-.neo .card {
-  background: #050505;
-}
-
-.theme-dropdown {
-  margin-top: 10px;
-  padding: 8px;
-  border-radius: 8px;
-  border: none;
-  font-size: 14px;
-}
-
-/* Theme-specific dropdowns */
-.osaka .theme-dropdown {
-  background: #134e4a;
-  color: #ccfbf1;
-}
-
-.tokyo .theme-dropdown {
-  background: #2e3c64;
-  color: #c0caf5;
-}
-
-.kyoto .theme-dropdown {
-  background: #e5e7eb;
-  color: #111827;
-}
-
-.neo .theme-dropdown {
-  background: #111;
-  color: #00ffcc;
-}
-
-.osaka .textarea,
-.osaka .btn {
-  background: #134e4a;
-  color: #ccfbf1;
-}
-
-.tokyo .textarea,
-.tokyo .btn {
-  background: #2e3c64;
-  color: #c0caf5;
-}
-
-.kyoto .textarea,
-.kyoto .btn {
-  background: #e5e7eb;
-  color: #111827;
-}
-
-.neo .textarea,
-.neo .btn {
-  background: #111;
-  color: #00ffcc;
-}
-
-/* 🔥 Top controls spacing */
+/* top controls bar */
 .top-controls {
   display: flex;
   gap: 12px;
@@ -294,33 +208,14 @@ textarea::selection {
   flex-wrap: wrap;
 }
 
-/* Ensure all buttons are consistent size */
-.btn, .file-label, .theme-dropdown {
-  padding: 10px 14px;
-  border-radius: 10px;
-}
-
-/* 🔥 Bottom control spacing */
+/* bottom control row */
 .controls.spaced {
   display: flex;
-  gap: 12px;
+  gap: 10px;
   flex-wrap: wrap;
   justify-content: center;
   margin-top: 15px;
 }
-
-.file-label {
-  padding: 10px 14px;
-  border-radius: 10px;
-  cursor: pointer;
-  text-align: center;
-  transition: 0.2s;
-}
-
-.osaka .file-label { background: #134e4a; color: #ccfbf1; }
-.tokyo .file-label { background: #2e3c64; color: #c0caf5; }
-.kyoto .file-label { background: #e5e7eb; color: #111827; }
-.neo .file-label { background: #111; color: #00ffcc; }
 
 .wpm-control {
   margin-top: 15px;
@@ -332,45 +227,93 @@ textarea::selection {
   margin-top: 8px;
 }
 
-/* Accent color per theme */
-.osaka input[type=\"range\"] { accent-color: #14b8a6; }
-.tokyo input[type=\"range\"] { accent-color: #7aa2f7; }
-.kyoto input[type=\"range\"] { accent-color: #4b5563; }
-.neo input[type=\"range\"] { accent-color: #00ffcc; }
+/* ─── THEMES ─────────────────────────────────── */
+
+/* Osaka Jade (default) */
+.osaka {
+  background: #0b1c1a;
+  color: #ccfbf1;
+}
+.osaka .card            { background: #102a27; }
+.osaka .textarea,
+.osaka .btn             { background: #134e4a; color: #ccfbf1; }
+.osaka .file-label      { background: #134e4a; color: #ccfbf1; }
+.osaka .theme-dropdown  { background: #134e4a; color: #ccfbf1; }
+.osaka input[type="range"] { accent-color: #14b8a6; }
+.osaka .primary         { background: #14b8a6; color: #022c22; }
+.osaka .primary:hover:not(:disabled) { background: #2dd4bf; }
+
+/* Tokyo Night */
+.tokyo {
+  background: #1a1b26;
+  color: #c0caf5;
+}
+.tokyo .card            { background: #24283b; }
+.tokyo .textarea,
+.tokyo .btn             { background: #2e3c64; color: #c0caf5; }
+.tokyo .file-label      { background: #2e3c64; color: #c0caf5; }
+.tokyo .theme-dropdown  { background: #2e3c64; color: #c0caf5; }
+.tokyo input[type="range"] { accent-color: #7aa2f7; }
+.tokyo .title           { color: #7aa2f7; }
+.tokyo .progress-bar    { background: linear-gradient(90deg, #7aa2f7, #bb9af7); }
+.tokyo .active-word     { background: rgba(122, 162, 247, 0.3); }
+.tokyo .primary         { background: #7aa2f7; color: #1a1b26; }
+.tokyo .primary:hover:not(:disabled) { background: #bb9af7; }
+.tokyo .progress-text   { color: #9ece6a; }
+.tokyo .keyboard-hint   { color: #565f89; }
+
+/* Kyoto Light — FIX 9: was in CSS but never in the dropdown */
+.kyoto {
+  background: #f3f4f6;
+  color: #1f2937;
+}
+.kyoto .card            { background: #ffffff; color: #1f2937; border-color: rgba(0,0,0,0.08); box-shadow: 0 10px 40px rgba(0,0,0,0.08); }
+.kyoto .textarea,
+.kyoto .btn             { background: #e5e7eb; color: #111827; }
+.kyoto .file-label      { background: #e5e7eb; color: #111827; }
+.kyoto .theme-dropdown  { background: #e5e7eb; color: #111827; }
+.kyoto input[type="range"] { accent-color: #4b5563; }
+.kyoto .title           { color: #374151; }
+.kyoto .reader-box      { color: #111827; }
+.kyoto .progress-container { background: #d1d5db; }
+.kyoto .progress-bar    { background: linear-gradient(90deg, #6b7280, #374151); }
+.kyoto .active-word     { background: rgba(75, 85, 99, 0.2); }
+.kyoto .primary         { background: #374151; color: #f9fafb; }
+.kyoto .primary:hover:not(:disabled) { background: #1f2937; }
+.kyoto .progress-text   { color: #6b7280; }
+.kyoto .keyboard-hint   { color: #9ca3af; }
+.kyoto .text-preview    { color: #374151; }
+.kyoto .btn:hover:not(:disabled) { background: #d1d5db; }
+.kyoto .highlight       { color: #dc2626; text-shadow: none; }
+
+/* Neo Dark */
+.neo {
+  background: #000000;
+  color: #00ffcc;
+}
+.neo .card              { background: #050505; border-color: rgba(0,255,200,0.15); }
+.neo .textarea,
+.neo .btn               { background: #111; color: #00ffcc; }
+.neo .file-label        { background: #111; color: #00ffcc; }
+.neo .theme-dropdown    { background: #111; color: #00ffcc; }
+.neo input[type="range"] { accent-color: #00ffcc; }
+.neo .title             { color: #00ffcc; }
+.neo .progress-bar      { background: linear-gradient(90deg, #00ffcc, #00ccaa); }
+.neo .active-word       { background: rgba(0, 255, 200, 0.2); }
+.neo .primary           { background: #00ffcc; color: #000; }
+.neo .primary:hover:not(:disabled) { background: #00e6b8; }
+.neo .progress-text     { color: #00ccaa; }
+.neo .keyboard-hint     { color: #006655; }
+.neo .btn:hover:not(:disabled) { background: #1a2a27; }
+
+/* smooth transitions across all states */
+body, .card, .btn, .textarea, .text-preview {
+  transition: background 0.25s ease, color 0.25s ease;
+}
 
 .theme-dropdown {
-  padding: 10px;
+  padding: 10px 14px;
   border-radius: 10px;
   border: none;
-}
-
-.osaka .theme-dropdown { background: #134e4a; color: #ccfbf1; }
-.tokyo .theme-dropdown { background: #2e3c64; color: #c0caf5; }
-.kyoto .theme-dropdown { background: #e5e7eb; color: #111827; }
-.neo .theme-dropdown { background: #111; color: #00ffcc; }
-
-.word-animate {
-  display: inline-block;
-  transition: transform 0.2s ease, opacity 0.2s ease;
-}
-
-.reader-box {
-  font-size: 42px;
-  font-weight: bold;
-  text-align: center;
-  margin: 30px 0;
-}
-
-.highlight {
-  color: red;
-}
-
-.active-word {
-  background: rgba(45, 212, 191, 0.3);
-  border-radius: 4px;
-  padding: 2px 4px;
-}
-
-body, .card, .btn, .textarea, .text-preview {
-  transition: all 0.25s ease;
+  font-size: 14px;
 }
