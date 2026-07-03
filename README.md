@@ -80,8 +80,3 @@ Rayner, K., Schotter, E. R., Masson, M. E. J., Potter, M. C., & Treiman, R. (201
 ## License
 
 MIT
-
-## Author
-
-Vijith Varatharajan
-[ORCID: 0009-0007-8713-1343](https://orcid.org/0009-0007-8713-1343)
